@@ -1,14 +1,8 @@
 console.log("start");
 
+// Class to represent a classmate
 class Classmate {
-    constructor(
-        firstname,
-        lastname,
-        pronouns,
-        phone,
-        email = null,
-        note = null
-    ) {
+    constructor(firstname, lastname, pronouns, phone, email = null, note = null) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.pronouns = pronouns;
@@ -17,130 +11,138 @@ class Classmate {
         this.note = note;
     }
 }
-const class_list = document.getElementById("class_list");
 
-//<start> User interface controls 
-const firstname_element = document.getElementById("firstname");
-const lastname_element = document.getElementById("lastname");
-const pronouns_element = document.getElementById("pronouns");
-const phone_element = document.getElementById("phone_number");
-const include_email_element = document.getElementById("email_checkbox");
-const email_element = document.getElementById("email");
-const note_element = document.getElementById("note")
-const include_note_element = document.getElementById("note_checkbox");
-const add_button_element = document.getElementById("add_button");
-//<end>
+// DOM Elements
+const classListElement = document.getElementById("class_list");
+const firstnameElement = document.getElementById("firstname");
+const lastnameElement = document.getElementById("lastname");
+const pronounsElement = document.getElementById("pronouns");
+const phoneElement = document.getElementById("phone_number");
+const includeEmailElement = document.getElementById("email_checkbox");
+const emailElement = document.getElementById("email");
+const noteElement = document.getElementById("note");
+const includeNoteElement = document.getElementById("note_checkbox");
+const addButtonElement = document.getElementById("add_button");
 
-//If the list is empty on page load then javascript is working
-function clear_list() {
-    console.log(class_list ? "Class list found" : "No class list found");
-    for (var index in class_list?.children){
-        let row = class_list.children[0];
-        if(row.tagName != "TR") continue;
-
-        class_list.removeChild(row);
+// Clear the class list table
+function clearList() {
+    console.log(classListElement ? "Class list found" : "No class list found");
+    while (classListElement.firstChild) {
+        classListElement.removeChild(classListElement.firstChild);
     }
-    console.log("cleared list")
+    console.log("List cleared");
 }
 
-function setup_checkbox(){
-    include_note_element
-    .addEventListener('change', 
-        event => {
-            note_element.disabled = !event.currentTarget.checked;
-            note_element.ariaDisabled = !event.currentTarget.checked;
-            disable_button(invalid_contact());
-    });
-
-    include_email_element
-    .addEventListener('change', 
-    event => {
-        email_element.disabled = !event.currentTarget.checked;
-        email_element.ariaDisabled = !event.currentTarget.checked;
-        disable_button(invalid_contact());
-
-    });
-
-    console.log("setup checkbox");
-}
-function setup_valid_check(){
-    firstname_element.addEventListener("input", _ => disable_button(invalid_contact()));
-    lastname_element.addEventListener("input", _ => disable_button(invalid_contact()));
-    pronouns_element.addEventListener("input", _ => disable_button(invalid_contact()));
-    phone_element.addEventListener("input", _ => disable_button(invalid_contact()));
-    email_element.addEventListener("input", _ => disable_button(invalid_contact()));
+// Setup event listeners for checkboxes
+function setupCheckboxListeners() {
+    includeNoteElement.addEventListener('change', handleNoteCheckboxChange);
+    includeEmailElement.addEventListener('change', handleEmailCheckboxChange);
+    console.log("Checkbox listeners set up");
 }
 
-function disable_button(disable){
-    add_button_element.disabled = disable;
-    add_button_element.ariaDisabled = disable;
-}
-function setup_add_button(){
-    add_button_element.addEventListener("click", event => {
-        if(invalid_contact()) return;
-        console.log('clicked');
-        
-        let classmate = new Classmate(
-            firstname_element.value,
-            lastname_element.value,
-            pronouns_element.value,
-            phone_element.value,
-            email_element.value.trim() != "" ? email_element.value : null,
-            note_element.value.trim() != "" ? note_element.value : null,
-        );
-
-        console.log("adding classmate");
-        add_to_list(classmate);
-        reset_contact_info();
-    })
-}
-function invalid_contact() {
-    return !firstname_element.validity.valid
-        || !lastname_element.validity.valid 
-        || !pronouns_element.validity.valid
-        || !phone_element.validity.valid
-        || include_email_element.checked && !email_element.validity.valid
-        || include_note_element.checked && !note_element.validity.valid;
+// Handle changes to the note checkbox
+function handleNoteCheckboxChange(event) {
+    noteElement.disabled = !event.currentTarget.checked;
+    noteElement.setAttribute('aria-disabled', !event.currentTarget.checked);
+    updateButtonState();
 }
 
+// Handle changes to the email checkbox
+function handleEmailCheckboxChange(event) {
+    emailElement.disabled = !event.currentTarget.checked;
+    emailElement.setAttribute('aria-disabled', !event.currentTarget.checked);
+    updateButtonState();
+}
 
-function add_to_list(classmate){
-    let row = document.createElement("tr");
+// Setup event listeners for input fields
+function setupInputListeners() {
+    const inputs = [firstnameElement, lastnameElement, pronounsElement, phoneElement, emailElement];
+    inputs.forEach(input => input.addEventListener("input", updateButtonState));
+}
 
-    let index = document.createElement("td");
-    let firstname = document.createElement("td");
-    let lastname = document.createElement("td");
-    let delete_column = document.createElement("td");
-    let delete_button = document.createElement("button");
+// Update the state of the add button based on input validity
+function updateButtonState() {
+    const isInvalid = isContactInvalid();
+    addButtonElement.disabled = isInvalid;
+    addButtonElement.setAttribute('aria-disabled', isInvalid);
+}
+
+// Handle add button click
+function setupAddButtonListener() {
+    addButtonElement.addEventListener("click", handleAddButtonClick);
+}
+
+// Handle adding a classmate to the list
+function handleAddButtonClick() {
+    if (isContactInvalid()) return updateButtonState();
     
-
-    index.innerHTML = class_list.children.length + 1;
-    firstname.innerHTML = classmate.firstname;
-    lastname.innerHTML = classmate.lastname;
-    delete_button.innerText = "❌";
-    delete_column.appendChild(delete_button);
-
-    row.appendChild(index);
-    row.appendChild(firstname);
-    row.appendChild(lastname);
-    row.appendChild(delete_column);
-
-    class_list.appendChild(row);
-    disable_button(true);
+    console.log('Add button clicked');
+    
+    const classmate = new Classmate(
+        firstnameElement.value,
+        lastnameElement.value,
+        pronounsElement.value,
+        phoneElement.value,
+        emailElement.value.trim() || null,
+        noteElement.value.trim() || null
+    );
+    
+    console.log("Adding classmate:", classmate);
+    addToList(classmate);
+    resetContactInfo();
 }
 
-function reset_contact_info(){
-    firstname_element.value = "";
-    lastname_element.value = "";
-    pronouns_element.value = "";
-    phone_element.value = "";
-    email_element.value = "";
-    note_element.value = "";
+// Check if the contact information is valid
+function isContactInvalid() {
+    return !firstnameElement.validity.valid
+        || !lastnameElement.validity.valid
+        || !pronounsElement.validity.valid
+        || !phoneElement.validity.valid
+        || (includeEmailElement.checked && !emailElement.validity.valid)
+        || (includeNoteElement.checked && !noteElement.validity.valid);
 }
 
-try{clear_list()}catch{}
-try{setup_checkbox()}catch{}
-try{setup_valid_check()}catch{}
-try{setup_add_button()}catch{}
+// Add a classmate to the list in the table
+function addToList(classmate) {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${classListElement.children.length + 1}</td>
+        <td>${classmate.firstname}</td>
+        <td>${classmate.lastname}</td>
+        <td><button>❌</button></td>
+    `;
+    
+    classListElement.appendChild(row);
+    updateButtonState();
+}
+
+// Reset the contact information form fields
+function resetContactInfo() {
+    firstnameElement.value = "";
+    lastnameElement.value = "";
+    pronounsElement.value = "";
+    phoneElement.value = "";
+    emailElement.value = "";
+    noteElement.value = "";
+}
+
+// Initialize the application
+function initialize() {
+    try {
+        clearList();
+        setupCheckboxListeners();
+        setupInputListeners();
+        setupAddButtonListener();
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+    console.log("Initialization complete");
+}
+
+// Run initialization
+initialize();
+
+
 
 console.log("done");
