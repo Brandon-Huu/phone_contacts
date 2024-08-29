@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <title>Contact Information</title>
+</head>
+
+<body>
+  <header>
+    <hgroup>
+      <h1>Phone Contacts</h1>
+      <p>Created by Brandon H, to simplify the sharing of class contact information</p>
+    </hgroup>
+  </header>
+
+  <main class="container parent">
+    <article id="Contact Information">
+      <header>
+        <h4>Contact Information</h4>
+      </header>
+      <content>
+        <div class="grid">
+          <label for="firstname">
+            First Name
+            <input minlength="1" type="text" id="firstname" name="firstname" placeholder="Alex" required/>
+          </label>
+          <label for="lastname">
+            Last Name
+            <input minlength="1" type="text" id="lastname" name="lastname" placeholder="Smith" required/>
+          </label>
+        </div>
+        <div class="grid">
+          <label for="pronouns">
+            Pronouns
+            <input minlength="1" type="text" id="pronouns" name="pronouns" placeholder="They/Them" required/>
+          </label>
+          <label for="phone_number" style="width: 100%">
+            Phone number
+            <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="832-507-1690" required/>
+          </label>
+        </div>
+        <label for="email" style="width: 100%">
+          <label>
+            <input id="email_checkbox" type="checkbox" name="email_checkbox" />
+            [Optional] Email address
+          </label>
+          <input  class="full_width" id="email" type="email" name="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" disabled aria-disabled="true" placeholder="johnwick@google.com"/>
+
+        </label>
+        <label for="note" style="width: 100%">
+          <label>
+            <input id="note_checkbox" type="checkbox" name="english" //>
+            [Optional] Note (   Anything you would like others to know )
+          </label>
+          <textarea id="note" name="text" rows=3 aria-disabled="true" disabled
+            placeholder="Working in EMS for 7 years, with a keen interest in disaster response. Looking forward to a great course and teamwork."></textarea>
+        </label>
+        <button class="full_width">Add contact information</button>
+      </content>
+      <footer>Did you know 12% or over 1 in 10 americans have no friends?</footer>
+    </article>
+    <article id="Classmates">
+      <header>
+        <h4>Classmates</h4>
+      </header>
+      <div>
+        <content>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody id="class_list">
+              <tr>
+                <td>1</td>
+                <td>Fatak</td>
+                <td>Error</td>
+                <td><button>❌</button></td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Enable</td>
+                <td>Javascript!</td>
+                <td><button>❌</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </content>
+      </div>
+      <footer>
+        Did you know theres a 99.9% chance that everyone on this list is a super cool person?
+      </footer>
+    </article>
+  </main>
+  <script src="code.js"></script>
+</body>
+
+</html>
