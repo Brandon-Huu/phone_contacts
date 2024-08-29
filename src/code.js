@@ -65,11 +65,23 @@ function updateButtonState() {
     const isInvalid = isContactInvalid();
     addButtonElement.disabled = isInvalid;
     addButtonElement.setAttribute('aria-disabled', isInvalid);
+    saveToStorage();
 }
 
 // Handle add button click
 function setupAddButtonListener() {
     addButtonElement.addEventListener("click", handleAddButtonClick);
+}
+
+function createClassmate(){
+    return classmate = new Classmate(
+        firstnameElement.value,
+        lastnameElement.value,
+        pronounsElement.value,
+        phoneElement.value,
+        emailElement.value.trim() || null,
+        noteElement.value.trim() || null
+    );
 }
 
 // Handle adding a classmate to the list
@@ -78,15 +90,8 @@ function handleAddButtonClick() {
     
     console.log('Add button clicked');
     
-    const classmate = new Classmate(
-        firstnameElement.value,
-        lastnameElement.value,
-        pronounsElement.value,
-        phoneElement.value,
-        emailElement.value.trim() || null,
-        noteElement.value.trim() || null
-    );
-    
+    const classmate = createClassmate();
+
     console.log("Adding classmate:", classmate);
     addToList(classmate);
     resetContactInfo();
@@ -140,9 +145,30 @@ function initialize() {
     console.log("Initialization complete");
 }
 
+
+//Repopulate the filds using information from a previous session.
+function loadFromStorage() {
+    const savedContact = JSON.parse(localStorage.getItem("saved_contact"));
+    if(typeof savedContact != "object") return;
+
+    firstnameElement.value = savedContact.firstname;
+    lastnameElement.value = savedContact.lastname;
+    pronounsElement.value = savedContact.pronouns;
+    phoneElement.value = savedContact.phone;
+    emailElement.value = savedContact.email;
+    noteElement.value = savedContact.note;
+
+    updateButtonState();
+}
+
+//Save field information to local storage
+function saveToStorage() {
+    localStorage.setItem("saved_contact", JSON.stringify(createClassmate()))
+}
+
 // Run initialization
 initialize();
-
+loadFromStorage();
 
 
 console.log("done");
