@@ -49,7 +49,7 @@
             <input id="email_checkbox" type="checkbox" name="email_checkbox" />
             [Optional] Email address
           </label>
-          <input  class="full_width" id="email" type="email" name="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" disabled aria-disabled="true" placeholder="johnwick@google.com"/>
+          <input  minlength="1" class="full_width" id="email" type="email" name="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" disabled aria-disabled="true" placeholder="johnwick@google.com" required/>
 
         </label>
         <label for="note" style="width: 100%">
@@ -57,10 +57,9 @@
             <input id="note_checkbox" type="checkbox" name="english" //>
             [Optional] Note (   Anything you would like others to know )
           </label>
-          <textarea id="note" name="text" rows=3 aria-disabled="true" disabled
-            placeholder="Working in EMS for 7 years, with a keen interest in disaster response. Looking forward to a great course and teamwork."></textarea>
+          <input minlength="1" id="note" name="note" aria-disabled="true" disabled placeholder="Working in EMS for 7 years, with a keen interest in disaster response. Looking forward to a great course and teamwork." required></textarea>
         </label>
-        <button class="full_width">Add contact information</button>
+        <button class="full_width" id="add_button" aria-disabled="true" disabled>Add contact information</button>
       </content>
       <footer>Did you know that a income tax increase of 00.01% would fully fund all EMS services?</footer>
     </article>
@@ -74,7 +73,7 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">First Name</th>
+                <th scope="col">First Name</th> 
                 <th scope="col">Last Name</th>
                 <th>Remove</th>
               </tr>
