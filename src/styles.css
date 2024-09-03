@@ -37,3 +37,9 @@ textarea:disabled, input:disabled {
   border: 2px dashed grey;
   filter: blur(1px);
 }
+
+table {
+  overflow-y: scroll;
+  display: block;
+  height: 520px;
+}
